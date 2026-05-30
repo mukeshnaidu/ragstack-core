@@ -220,5 +220,4 @@ __marimo__/
 #Claude docs
 docs/
 claude.md
-src/tests
 examples
