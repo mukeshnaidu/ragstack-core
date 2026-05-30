@@ -1,7 +1,8 @@
 from datetime import datetime
+
+from ragstack_core.models.document_chunk import DocumentChunk
 from ragstack_core.models.embedding_record import EmbeddingRecord
 from ragstack_core.models.search_result import SearchResult
-from ragstack_core.models.document_chunk import DocumentChunk
 
 
 def test_embedding_record_fields():

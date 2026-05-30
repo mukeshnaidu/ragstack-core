@@ -5,23 +5,22 @@ Each test is focused on a single responsibility so failures pinpoint the
 exact step that regressed. The integration tests at the bottom validate
 the steps work correctly as a composed pipeline.
 """
-import pytest
 
 from ragstack_core.cleaners.base_cleaner import CleanContext, CleaningResult
 from ragstack_core.cleaners.pipeline import TextCleaningPipeline
-from ragstack_core.cleaners.text_cleaner import TextCleaner
 from ragstack_core.cleaners.steps import (
-    EncodingFixer,
-    UnicodeNormalizer,
     ControlCharCleaner,
-    LigatureExpander,
-    TypographyCleaner,
+    EncodingFixer,
     HtmlTagStripper,
+    LigatureExpander,
     MarkdownCleaner,
     PdfArtifactCleaner,
-    WhitespaceNormalizer,
     PiiRedactor,
+    TypographyCleaner,
+    UnicodeNormalizer,
+    WhitespaceNormalizer,
 )
+from ragstack_core.cleaners.text_cleaner import TextCleaner
 from ragstack_core.models.document_block import DocumentBlock
 
 _CTX = CleanContext()
@@ -32,6 +31,7 @@ _MD_CTX = CleanContext(file_type="md")
 # ---------------------------------------------------------------------------
 # Individual step tests
 # ---------------------------------------------------------------------------
+
 
 class TestEncodingFixer:
     def test_fixes_mojibake(self):
@@ -63,8 +63,8 @@ class TestControlCharCleaner:
         assert "helloworld" == result
 
     def test_removes_form_feed(self):
-        result = ControlCharCleaner().clean("page1\x0Cpage2", _CTX)
-        assert "\x0C" not in result
+        result = ControlCharCleaner().clean("page1\x0cpage2", _CTX)
+        assert "\x0c" not in result
 
     def test_removes_zero_width_space(self):
         result = ControlCharCleaner().clean("hel​lo", _CTX)
@@ -284,6 +284,7 @@ class TestPiiRedactor:
 # Pipeline integration tests
 # ---------------------------------------------------------------------------
 
+
 class TestTextCleaningPipeline:
     def test_default_pipeline_end_to_end(self):
         dirty = "CafÃ©’s ﬁne   food\x00\n\n\n\nEnjoy!"
@@ -357,6 +358,7 @@ class TestTextCleaningPipeline:
 # ---------------------------------------------------------------------------
 # Backward compatibility
 # ---------------------------------------------------------------------------
+
 
 class TestTextCleaner:
     def test_clean_text_returns_string(self):

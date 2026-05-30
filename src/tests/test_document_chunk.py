@@ -32,5 +32,7 @@ def test_chunk_id_differs_by_document():
 
 
 def test_user_provided_chunk_id_preserved():
-    chunk = DocumentChunk(document_id="doc-1", chunk_id="custom-id", chunk_index=0, text="hello")
+    chunk = DocumentChunk(
+        document_id="doc-1", chunk_id="custom-id", chunk_index=0, text="hello"
+    )
     assert chunk.chunk_id == "custom-id"

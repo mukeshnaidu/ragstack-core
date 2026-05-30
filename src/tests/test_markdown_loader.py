@@ -1,5 +1,4 @@
 import pytest
-from pathlib import Path
 
 from ragstack_core.loaders.markdown_loader import MarkdownLoader
 
@@ -97,6 +96,7 @@ def test_load_blocks_empty_file_yields_no_blocks(tmp_path):
 def test_load_info_raises_for_missing_file():
     with pytest.raises(FileNotFoundError):
         MarkdownLoader().load_info("/nonexistent/file.md")
+
 
 def test_load_blocks_ignores_headings_in_code_blocks(tmp_path):
     path = tmp_path / "doc.md"

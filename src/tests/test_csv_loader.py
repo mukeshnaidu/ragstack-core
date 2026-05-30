@@ -1,6 +1,7 @@
 import csv
-import pytest
 from pathlib import Path
+
+import pytest
 
 from ragstack_core.loaders.csv_loader import CsvLoader
 

@@ -1,7 +1,8 @@
 """Tests for TextLoader — load_info and load_blocks."""
 
-import pytest
 from pathlib import Path
+
+import pytest
 
 from ragstack_core.loaders.text_loader import TextLoader
 from ragstack_core.models.document_info import DocumentInfo

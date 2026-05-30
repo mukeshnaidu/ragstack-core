@@ -1,6 +1,7 @@
-import pytest
-import openpyxl
 from pathlib import Path
+
+import openpyxl
+import pytest
 
 from ragstack_core.loaders.excel_loader import ExcelLoader
 
@@ -34,10 +35,13 @@ def test_load_blocks_groups_rows(tmp_path):
 
 def test_load_blocks_all_sheets_processed(tmp_path):
     path = tmp_path / "data.xlsx"
-    make_xlsx(path, {
-        "Sheet1": [["col"], ["a"], ["b"]],
-        "Sheet2": [["col"], ["c"]],
-    })
+    make_xlsx(
+        path,
+        {
+            "Sheet1": [["col"], ["a"], ["b"]],
+            "Sheet2": [["col"], ["c"]],
+        },
+    )
     loader = ExcelLoader()
     info = loader.load_info(path)
     blocks = list(loader.load_blocks(path, info))
@@ -48,10 +52,13 @@ def test_load_blocks_all_sheets_processed(tmp_path):
 
 def test_load_blocks_block_index_is_global_across_sheets(tmp_path):
     path = tmp_path / "data.xlsx"
-    make_xlsx(path, {
-        "Sheet1": [["col"], ["a"]],
-        "Sheet2": [["col"], ["b"]],
-    })
+    make_xlsx(
+        path,
+        {
+            "Sheet1": [["col"], ["a"]],
+            "Sheet2": [["col"], ["b"]],
+        },
+    )
     loader = ExcelLoader()
     info = loader.load_info(path)
     blocks = list(loader.load_blocks(path, info))

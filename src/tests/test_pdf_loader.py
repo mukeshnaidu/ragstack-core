@@ -1,6 +1,6 @@
-import pytest
 from pathlib import Path
 
+import pytest
 from pypdf import PdfWriter
 
 from ragstack_core.loaders.pdf_loader import PdfLoader

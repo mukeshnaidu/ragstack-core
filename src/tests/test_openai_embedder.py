@@ -1,12 +1,16 @@
-import pytest
 from unittest.mock import MagicMock, patch
+
+import pytest
+
 from ragstack_core.embedders.openai_embedder import OpenAIEmbedder
 
 
 @pytest.fixture
 def mock_openai():
-    with patch("openai.OpenAI") as mock_cls, \
-         patch("openai.AsyncOpenAI") as mock_async_cls:
+    with (
+        patch("openai.OpenAI") as mock_cls,
+        patch("openai.AsyncOpenAI") as mock_async_cls,
+    ):
         mock_client = MagicMock()
         mock_async_client = MagicMock()
         mock_cls.return_value = mock_client
@@ -57,6 +61,7 @@ def test_embed_batches_large_input(mock_openai):
 
 def test_raises_embedding_error_on_api_failure(mock_openai):
     from ragstack_core.exceptions import EmbeddingError
+
     mock_client, _ = mock_openai
     mock_client.embeddings.create.side_effect = Exception("rate limit")
     embedder = OpenAIEmbedder(api_key="test-key")
@@ -66,10 +71,10 @@ def test_raises_embedding_error_on_api_failure(mock_openai):
 
 def test_requires_api_key():
     import os
+
     os.environ.pop("OPENAI_API_KEY", None)
     with pytest.raises(ValueError, match="api_key"):
-        with patch("openai.OpenAI"), \
-             patch("openai.AsyncOpenAI"):
+        with patch("openai.OpenAI"), patch("openai.AsyncOpenAI"):
             OpenAIEmbedder()
 
 

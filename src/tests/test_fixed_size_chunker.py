@@ -1,9 +1,10 @@
 import uuid
+
 import pytest
 import tiktoken
 
-from ragstack_core.models.document_block import DocumentBlock
 from ragstack_core.chunkers.fixed_size_chunker import FixedSizeChunker, ModelType
+from ragstack_core.models.document_block import DocumentBlock
 
 _ENC = tiktoken.get_encoding("cl100k_base")
 
@@ -13,16 +14,21 @@ def make_block(text: str) -> DocumentBlock:
         document_id=str(uuid.uuid4()),
         block_index=3,
         text=text,
-        metadata={"file_name": "doc.txt", "file_type": "txt", "source_path": "/doc.txt"},
+        metadata={
+            "file_name": "doc.txt",
+            "file_type": "txt",
+            "source_path": "/doc.txt",
+        },
     )
 
 
 def long_text(num_tokens: int) -> str:
     # "token " encodes to roughly 1-2 tokens; repeat enough to exceed target
-    return ("ragstack " * (num_tokens * 2))
+    return "ragstack " * (num_tokens * 2)
 
 
 # --- ModelType presets ---
+
 
 def test_openai_embedding_preset():
     c = FixedSizeChunker(model_type=ModelType.OPENAI_EMBEDDING)
@@ -56,6 +62,7 @@ def test_general_preset():
 
 # --- Explicit overrides ---
 
+
 def test_explicit_chunk_size_overrides_preset():
     c = FixedSizeChunker(model_type=ModelType.CLAUDE, chunk_size=200)
     assert c.chunk_size == 200
@@ -69,6 +76,7 @@ def test_explicit_overlap_overrides_preset():
 
 
 # --- Construction validation ---
+
 
 def test_raises_when_chunk_size_is_zero():
     with pytest.raises(ValueError):
@@ -97,6 +105,7 @@ def test_raises_when_overlap_exceeds_chunk_size():
 
 # --- Chunking behaviour ---
 
+
 def test_empty_text_yields_no_chunks():
     block = make_block("")
     chunks = list(FixedSizeChunker().chunk_block(block))
@@ -119,7 +128,9 @@ def test_long_text_yields_multiple_chunks():
 def test_each_chunk_within_token_limit():
     block = make_block(long_text(600))
     chunk_size = 100
-    chunks = list(FixedSizeChunker(chunk_size=chunk_size, overlap=10).chunk_block(block))
+    chunks = list(
+        FixedSizeChunker(chunk_size=chunk_size, overlap=10).chunk_block(block)
+    )
     for chunk in chunks:
         assert len(_ENC.encode(chunk.text)) <= chunk_size
 
@@ -147,7 +158,9 @@ def test_adjacent_chunks_share_overlap_tokens():
     block = make_block(long_text(400))
     chunk_size = 100
     overlap = 20
-    chunks = list(FixedSizeChunker(chunk_size=chunk_size, overlap=overlap).chunk_block(block))
+    chunks = list(
+        FixedSizeChunker(chunk_size=chunk_size, overlap=overlap).chunk_block(block)
+    )
     assert len(chunks) >= 2
 
     tokens_0 = _ENC.encode(chunks[0].text)

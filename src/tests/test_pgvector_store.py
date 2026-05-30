@@ -1,7 +1,8 @@
 import os
-import pytest
 from unittest.mock import MagicMock
-from ragstack_core.models.document_chunk import DocumentChunk
+
+import pytest
+
 from ragstack_core.stores.pgvector_store import PgVectorStore
 
 

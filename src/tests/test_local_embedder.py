@@ -1,5 +1,7 @@
 import asyncio
+
 import pytest
+
 from ragstack_core.embedders.local_embedder import LocalEmbedder
 
 
