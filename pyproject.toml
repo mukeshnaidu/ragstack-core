@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project]
+name = "ragstack"
+version = "0.1.0"
+description = "Enterprise-grade Python RAG stack — loaders, cleaning, chunking, embedding, and vector store in one composable library"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.12"
+dependencies = [
+   "ftfy>=6.3.1",
+   "openpyxl>=3.1.5",
+   'pydantic>=2.13.4',
+   "pypdf>=6.12.2",
+   "tiktoken>=0.13.0",
+]
+
+[project.optional-dependencies]
+openai   = ["openai>=1.0.0"]
+local    = ["sentence-transformers>=3.0.0"]
+pgvector = ["psycopg[pool]>=3.1.0", "pgvector>=0.3.0"]
+qdrant   = ["qdrant-client>=1.9.0"]
+chroma   = ["chromadb>=0.5.0"]
+stores   = ["psycopg[pool]>=3.1.0", "pgvector>=0.3.0", "qdrant-client>=1.9.0", "chromadb>=0.5.0"]
+all      = ["openai>=1.0.0", "sentence-transformers>=3.0.0", "psycopg[pool]>=3.1.0", "pgvector>=0.3.0", "qdrant-client>=1.9.0", "chromadb>=0.5.0"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.3",
+    "pytest-asyncio>=0.23.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
