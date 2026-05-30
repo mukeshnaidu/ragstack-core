@@ -4,7 +4,7 @@ from typing import Protocol, runtime_checkable
 
 class EmbeddingProvider(str, Enum):
     OPENAI = "openai"
-    LOCAL  = "local"
+    LOCAL = "local"
 
 
 @runtime_checkable
@@ -18,4 +18,3 @@ class EmbedderProtocol(Protocol):
     def embed(self, texts: list[str]) -> list[list[float]]: ...
 
     async def embed_async(self, texts: list[str]) -> list[list[float]]: ...
-

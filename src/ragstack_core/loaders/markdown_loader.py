@@ -9,8 +9,8 @@ from ragstack_core.models.document_info import DocumentInfo
 _HEADING_RE = re.compile(r"^(#{1,6} .+)$", re.MULTILINE)
 _FENCE_RE = re.compile(r"^(`{3,}|~{3,}).*?\n.*?\n\1$", re.MULTILINE | re.DOTALL)
 
-class MarkdownLoader(BaseLoader):
 
+class MarkdownLoader(BaseLoader):
     def load_info(self, file_path: str | Path) -> DocumentInfo:
         return DocumentInfo.from_path(file_path)
 
@@ -45,9 +45,10 @@ class MarkdownLoader(BaseLoader):
     def _split_sections(self, content: str) -> list[tuple[str, int, str]]:
         # Temporarily hide fenced code blocks so we don't split on comments inside them
         fences = []
+
         def _repl(match):
             fences.append(match.group(0))
-            return f"\n__RAGSTACK_FENCE_{len(fences)-1}__\n"
+            return f"\n__RAGSTACK_FENCE_{len(fences) - 1}__\n"
 
         safe_content = _FENCE_RE.sub(_repl, content)
 

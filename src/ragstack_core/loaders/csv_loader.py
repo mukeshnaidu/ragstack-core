@@ -8,7 +8,6 @@ from ragstack_core.models.document_info import DocumentInfo
 
 
 class CsvLoader(BaseLoader):
-
     def __init__(self, rows_per_block: int = 100, encoding: str = "utf-8") -> None:
         if rows_per_block <= 0:
             raise ValueError("rows_per_block must be greater than 0")
@@ -38,9 +37,7 @@ class CsvLoader(BaseLoader):
 
             for row in reader:
                 current_row += 1
-                block_rows.append(
-                    " | ".join(f"{k}: {v}" for k, v in row.items())
-                )
+                block_rows.append(" | ".join(f"{k}: {v}" for k, v in row.items()))
 
                 if len(block_rows) >= self._rows_per_block:
                     yield self._create_block(

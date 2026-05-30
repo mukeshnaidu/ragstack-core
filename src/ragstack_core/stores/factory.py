@@ -10,6 +10,7 @@ def create_store(
     match provider:
         case VectorStoreProvider.PGVECTOR:
             from ragstack_core.stores.pgvector_store import PgVectorStore
+
             return PgVectorStore(
                 connection_string=connection_string,
                 collection_name=collection_name,
@@ -17,6 +18,7 @@ def create_store(
             )
         case VectorStoreProvider.QDRANT:
             from ragstack_core.stores.qdrant_store import QdrantStore
+
             return QdrantStore(
                 connection_string=connection_string,
                 collection_name=collection_name,
@@ -24,6 +26,7 @@ def create_store(
             )
         case VectorStoreProvider.CHROMA:
             from ragstack_core.stores.chroma_store import ChromaStore
+
             return ChromaStore(
                 connection_string=connection_string,
                 collection_name=collection_name,

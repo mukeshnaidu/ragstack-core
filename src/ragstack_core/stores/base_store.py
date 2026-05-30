@@ -7,8 +7,8 @@ from ragstack_core.models.document_chunk import DocumentChunk
 
 class VectorStoreProvider(str, Enum):
     PGVECTOR = "pgvector"
-    QDRANT   = "qdrant"
-    CHROMA   = "chroma"
+    QDRANT = "qdrant"
+    CHROMA = "chroma"
 
 
 @runtime_checkable

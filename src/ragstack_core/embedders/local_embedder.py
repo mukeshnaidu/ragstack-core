@@ -7,7 +7,6 @@ _DEFAULT_BATCH_SIZE = 64
 
 
 class LocalEmbedder:
-
     def __init__(
         self,
         model_name: str | None = None,
@@ -22,12 +21,10 @@ class LocalEmbedder:
             )
         self._model_name = model_name or _DEFAULT_MODEL
         self._batch_size = batch_size or _DEFAULT_BATCH_SIZE
-        self._model = SentenceTransformer(
-            self._model_name, device=device or "cpu"
+        self._model = SentenceTransformer(self._model_name, device=device or "cpu")
+        get_dim = getattr(self._model, "get_embedding_dimension", None) or getattr(
+            self._model, "get_sentence_embedding_dimension"
         )
-        get_dim = getattr(
-            self._model, "get_embedding_dimension", None
-        ) or getattr(self._model, "get_sentence_embedding_dimension")
         self._dimensions: int = get_dim()
 
     @property

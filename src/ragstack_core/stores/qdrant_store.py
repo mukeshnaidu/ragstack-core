@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 
 
 class QdrantStore:
-
     def __init__(
         self,
         connection_string: str = ":memory:",
@@ -145,7 +144,11 @@ class QdrantStore:
             self._client.delete(
                 collection_name=self._collection_name,
                 points_selector=Filter(
-                    must=[FieldCondition(key="document_id", match=MatchValue(value=document_id))]
+                    must=[
+                        FieldCondition(
+                            key="document_id", match=MatchValue(value=document_id)
+                        )
+                    ]
                 ),
             )
         except Exception as exc:
@@ -163,7 +166,10 @@ class QdrantStore:
     async def search_async(
         self, query: str, embedder: EmbedderProtocol, top_k: int = 5
     ) -> list[DocumentChunk]:
-        return [chunk for chunk, _ in await self.search_with_scores_async(query, embedder, top_k)]
+        return [
+            chunk
+            for chunk, _ in await self.search_with_scores_async(query, embedder, top_k)
+        ]
 
     async def search_with_scores_async(
         self, query: str, embedder: EmbedderProtocol, top_k: int = 5

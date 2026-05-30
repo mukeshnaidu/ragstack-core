@@ -1,20 +1,19 @@
 import re
+
 from ragstack_core.cleaners.base_cleaner import CleanContext
 
 # RFC 5322-simplified email pattern — covers the vast majority of real addresses
-_EMAIL = re.compile(
-    r"\b[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}\b"
-)
+_EMAIL = re.compile(r"\b[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}\b")
 
 # E.164 and common national formats:
 #   +1-800-555-0199  (800) 555-0199  800.555.0199  8005550199
 _PHONE = re.compile(
-    r"(?<!\d)"                          # no digit before
-    r"(\+?\d{1,3}[\s\-.]?)?"           # optional country code
-    r"(\(?\d{3}\)?[\s\-.]?)"           # area code
-    r"(\d{3}[\s\-.]?)"                 # exchange
-    r"(\d{4})"                         # subscriber
-    r"(?!\d)"                          # no digit after
+    r"(?<!\d)"  # no digit before
+    r"(\+?\d{1,3}[\s\-.]?)?"  # optional country code
+    r"(\(?\d{3}\)?[\s\-.]?)"  # area code
+    r"(\d{3}[\s\-.]?)"  # exchange
+    r"(\d{4})"  # subscriber
+    r"(?!\d)"  # no digit after
 )
 
 # URLs: http, https, ftp
@@ -24,9 +23,7 @@ _URL = re.compile(
 )
 
 # IPv4 addresses
-_IPV4 = re.compile(
-    r"\b(?:\d{1,3}\.){3}\d{1,3}\b"
-)
+_IPV4 = re.compile(r"\b(?:\d{1,3}\.){3}\d{1,3}\b")
 
 
 class PiiRedactor:

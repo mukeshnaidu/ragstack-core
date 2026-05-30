@@ -10,24 +10,23 @@ from ragstack_core.models.document_chunk import DocumentChunk
 _ENCODING = tiktoken.get_encoding("cl100k_base")
 
 _PRESETS: dict[str, dict[str, int]] = {
-    "openai_embedding":     {"chunk_size": 512,  "overlap": 50},
-    "sentence_transformer": {"chunk_size": 256,  "overlap": 32},
-    "cohere":               {"chunk_size": 512,  "overlap": 50},
-    "claude":               {"chunk_size": 1024, "overlap": 100},
-    "general":              {"chunk_size": 512,  "overlap": 50},
+    "openai_embedding": {"chunk_size": 512, "overlap": 50},
+    "sentence_transformer": {"chunk_size": 256, "overlap": 32},
+    "cohere": {"chunk_size": 512, "overlap": 50},
+    "claude": {"chunk_size": 1024, "overlap": 100},
+    "general": {"chunk_size": 512, "overlap": 50},
 }
 
 
 class ModelType(str, Enum):
-    OPENAI_EMBEDDING     = "openai_embedding"
+    OPENAI_EMBEDDING = "openai_embedding"
     SENTENCE_TRANSFORMER = "sentence_transformer"
-    COHERE               = "cohere"
-    CLAUDE               = "claude"
-    GENERAL              = "general"
+    COHERE = "cohere"
+    CLAUDE = "claude"
+    GENERAL = "general"
 
 
 class FixedSizeChunker(BaseChunker):
-
     def __init__(
         self,
         model_type: ModelType = ModelType.GENERAL,

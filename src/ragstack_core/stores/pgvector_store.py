@@ -10,13 +10,14 @@ logger = logging.getLogger(__name__)
 
 
 class PgVectorStore:
-
-    def __init__(self, connection_string: str, collection_name: str = "ragstack") -> None:
+    def __init__(
+        self, connection_string: str, collection_name: str = "ragstack"
+    ) -> None:
         try:
             import psycopg
+            from pgvector.psycopg import register_vector
             from psycopg.rows import dict_row
             from psycopg_pool import ConnectionPool
-            from pgvector.psycopg import register_vector
         except ImportError:
             raise MissingDependencyError(
                 "psycopg and pgvector are not installed. Run: uv add 'ragstack[pgvector]'"
@@ -67,7 +68,12 @@ class PgVectorStore:
                         returning=False,
                     )
                     embedding_rows = [
-                        (chunk.chunk_id, embedder.model_name, embedder.dimensions, vector)
+                        (
+                            chunk.chunk_id,
+                            embedder.model_name,
+                            embedder.dimensions,
+                            vector,
+                        )
                         for chunk, vector in zip(chunks, vectors)
                     ]
                     cur.executemany(
@@ -110,7 +116,13 @@ class PgVectorStore:
                         ORDER BY e.vector <=> %s::vector
                         LIMIT %s
                         """,
-                        (vector, embedder.model_name, self._collection_name, vector, top_k),
+                        (
+                            vector,
+                            embedder.model_name,
+                            self._collection_name,
+                            vector,
+                            top_k,
+                        ),
                     )
                     rows = cur.fetchall()
             return [
@@ -167,7 +179,10 @@ class PgVectorStore:
     async def search_async(
         self, query: str, embedder: EmbedderProtocol, top_k: int = 5
     ) -> list[DocumentChunk]:
-        return [chunk for chunk, _ in await self.search_with_scores_async(query, embedder, top_k)]
+        return [
+            chunk
+            for chunk, _ in await self.search_with_scores_async(query, embedder, top_k)
+        ]
 
     async def search_with_scores_async(
         self, query: str, embedder: EmbedderProtocol, top_k: int = 5

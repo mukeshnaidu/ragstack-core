@@ -1,15 +1,16 @@
 import re
 from collections import Counter
+
 from ragstack_core.cleaners.base_cleaner import CleanContext
 
 # A line that is just a number (page number), optionally surrounded by
 # common decorators like "- 3 -", "Page 3", "3 of 120"
 _PAGE_NUM = re.compile(
-    r"^[\s\-–—]*"           # optional leading dashes/spaces
-    r"(Page\s+)?"            # optional "Page " prefix
-    r"\d{1,5}"               # the number itself
-    r"(\s+of\s+\d{1,5})?"   # optional "of N"
-    r"[\s\-–—]*$",           # optional trailing dashes/spaces
+    r"^[\s\-–—]*"  # optional leading dashes/spaces
+    r"(Page\s+)?"  # optional "Page " prefix
+    r"\d{1,5}"  # the number itself
+    r"(\s+of\s+\d{1,5})?"  # optional "of N"
+    r"[\s\-–—]*$",  # optional trailing dashes/spaces
     re.IGNORECASE,
 )
 
@@ -73,7 +74,9 @@ class PdfArtifactCleaner:
         return "\n".join(cleaned)
 
     @staticmethod
-    def detect_repeating_lines(blocks_text: list[str], threshold: float = _REPEAT_THRESHOLD) -> set[str]:
+    def detect_repeating_lines(
+        blocks_text: list[str], threshold: float = _REPEAT_THRESHOLD
+    ) -> set[str]:
         """Identifies lines that repeat across enough blocks to be headers/footers.
 
         Args:
@@ -107,8 +110,5 @@ class PdfArtifactCleaner:
         """Removes previously detected repeating lines from a block."""
         if not repeating:
             return text
-        lines = [
-            line for line in text.splitlines()
-            if line.strip() not in repeating
-        ]
+        lines = [line for line in text.splitlines() if line.strip() not in repeating]
         return "\n".join(lines)

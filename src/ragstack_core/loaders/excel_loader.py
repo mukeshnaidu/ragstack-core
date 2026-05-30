@@ -9,7 +9,6 @@ from ragstack_core.models.document_info import DocumentInfo
 
 
 class ExcelLoader(BaseLoader):
-
     def __init__(self, rows_per_block: int = 100) -> None:
         if rows_per_block <= 0:
             raise ValueError("rows_per_block must be greater than 0")
@@ -23,7 +22,9 @@ class ExcelLoader(BaseLoader):
         file_path: str | Path,
         document_info: DocumentInfo,
     ) -> Iterator[DocumentBlock]:
-        workbook = openpyxl.load_workbook(str(file_path), read_only=True, data_only=True)
+        workbook = openpyxl.load_workbook(
+            str(file_path), read_only=True, data_only=True
+        )
         try:
             block_index = 0
 
@@ -36,7 +37,9 @@ class ExcelLoader(BaseLoader):
                 except StopIteration:
                     continue
 
-                column_names = [str(cell) if cell is not None else "" for cell in header_row]
+                column_names = [
+                    str(cell) if cell is not None else "" for cell in header_row
+                ]
                 block_rows: list[str] = []
                 start_row = 1
                 current_row = 0

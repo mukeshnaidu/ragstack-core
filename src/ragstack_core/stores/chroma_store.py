@@ -23,7 +23,6 @@ def _safe_metadata(metadata: dict) -> dict:
 
 
 class ChromaStore:
-
     def __init__(
         self,
         connection_string: str = ":memory:",
@@ -63,8 +62,18 @@ class ChromaStore:
                         "_ragstack_chunk_id": c.chunk_id,
                         "_ragstack_document_id": c.document_id,
                         "_ragstack_chunk_index": c.chunk_index,
-                        **_safe_metadata({k: v for k, v in c.metadata.items()
-                                          if k not in {"_ragstack_chunk_id", "_ragstack_document_id", "_ragstack_chunk_index"}}),
+                        **_safe_metadata(
+                            {
+                                k: v
+                                for k, v in c.metadata.items()
+                                if k
+                                not in {
+                                    "_ragstack_chunk_id",
+                                    "_ragstack_document_id",
+                                    "_ragstack_chunk_index",
+                                }
+                            }
+                        ),
                     }
                     for c in chunks
                 ],
@@ -105,7 +114,12 @@ class ChromaStore:
                     metadata={
                         k: v
                         for k, v in meta.items()
-                        if k not in {"_ragstack_chunk_id", "_ragstack_document_id", "_ragstack_chunk_index"}
+                        if k
+                        not in {
+                            "_ragstack_chunk_id",
+                            "_ragstack_document_id",
+                            "_ragstack_chunk_index",
+                        }
                     },
                 )
                 score = 1.0 - distance
@@ -140,7 +154,10 @@ class ChromaStore:
     async def search_async(
         self, query: str, embedder: EmbedderProtocol, top_k: int = 5
     ) -> list[DocumentChunk]:
-        return [chunk for chunk, _ in await self.search_with_scores_async(query, embedder, top_k)]
+        return [
+            chunk
+            for chunk, _ in await self.search_with_scores_async(query, embedder, top_k)
+        ]
 
     async def search_with_scores_async(
         self, query: str, embedder: EmbedderProtocol, top_k: int = 5

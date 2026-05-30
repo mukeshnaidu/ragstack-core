@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+
 from ragstack_core.models.document_chunk import DocumentChunk
 
 
