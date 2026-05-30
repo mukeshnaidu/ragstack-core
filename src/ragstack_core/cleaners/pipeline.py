@@ -19,7 +19,8 @@ from ragstack_core.models.document_block import DocumentBlock
 
 
 class TextCleaningPipeline:
-    """Composable pipeline that runs text through an ordered list of CleanerStep instances.
+    """Composable pipeline that runs text through an ordered list of CleanerStep
+    instances.
 
     Usage — preset factories:
         pipeline = TextCleaningPipeline.for_pdf()

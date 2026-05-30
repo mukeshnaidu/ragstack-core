@@ -20,7 +20,8 @@ class PgVectorStore:
             from psycopg_pool import ConnectionPool
         except ImportError:
             raise MissingDependencyError(
-                "psycopg and pgvector are not installed. Run: uv add 'ragstack[pgvector]'"
+                "psycopg and pgvector are not installed. "
+                "Run: uv add 'ragstack[pgvector]'"
             )
         self._collection_name = collection_name
         self._register_vector = register_vector
@@ -58,7 +59,10 @@ class PgVectorStore:
                     ]
                     cur.executemany(
                         """
-                        INSERT INTO chunks (chunk_id, document_id, chunk_index, text, metadata, collection)
+                        INSERT INTO chunks (
+                            chunk_id, document_id, chunk_index, text,
+                            metadata, collection
+                        )
                         VALUES (%s, %s, %s, %s, %s, %s)
                         ON CONFLICT (chunk_id) DO UPDATE
                             SET text = EXCLUDED.text,
@@ -78,7 +82,9 @@ class PgVectorStore:
                     ]
                     cur.executemany(
                         """
-                        INSERT INTO embeddings (chunk_id, model_name, dimensions, vector)
+                        INSERT INTO embeddings (
+                            chunk_id, model_name, dimensions, vector
+                        )
                         VALUES (%s, %s, %s, %s)
                         ON CONFLICT (chunk_id, model_name) DO UPDATE
                             SET vector = EXCLUDED.vector,
@@ -108,8 +114,8 @@ class PgVectorStore:
                 with conn.cursor() as cur:
                     cur.execute(
                         """
-                        SELECT c.chunk_id, c.document_id, c.chunk_index, c.text, c.metadata,
-                               1 - (e.vector <=> %s::vector) AS score
+                        SELECT c.chunk_id, c.document_id, c.chunk_index, c.text,
+                               c.metadata, 1 - (e.vector <=> %s::vector) AS score
                         FROM embeddings e
                         JOIN chunks c ON c.chunk_id = e.chunk_id
                         WHERE e.model_name = %s AND c.collection = %s
@@ -148,7 +154,8 @@ class PgVectorStore:
             with self._pool.connection() as conn:
                 with conn.cursor() as cur:
                     cur.execute(
-                        "DELETE FROM chunks WHERE chunk_id = ANY(%s) AND collection = %s",
+                        "DELETE FROM chunks WHERE chunk_id = ANY(%s) "
+                        "AND collection = %s",
                         (chunk_ids, self._collection_name),
                     )
                 conn.commit()
