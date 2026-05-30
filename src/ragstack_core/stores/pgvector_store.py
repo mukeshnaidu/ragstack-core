@@ -10,16 +10,18 @@ logger = logging.getLogger(__name__)
 
 
 class PgVectorStore:
-
-    def __init__(self, connection_string: str, collection_name: str = "ragstack") -> None:
+    def __init__(
+        self, connection_string: str, collection_name: str = "ragstack"
+    ) -> None:
         try:
             import psycopg
+            from pgvector.psycopg import register_vector
             from psycopg.rows import dict_row
             from psycopg_pool import ConnectionPool
-            from pgvector.psycopg import register_vector
         except ImportError:
             raise MissingDependencyError(
-                "psycopg and pgvector are not installed. Run: uv add 'ragstack[pgvector]'"
+                "psycopg and pgvector are not installed. "
+                "Run: uv add 'ragstack[pgvector]'"
             )
         self._collection_name = collection_name
         self._register_vector = register_vector
@@ -57,7 +59,10 @@ class PgVectorStore:
                     ]
                     cur.executemany(
                         """
-                        INSERT INTO chunks (chunk_id, document_id, chunk_index, text, metadata, collection)
+                        INSERT INTO chunks (
+                            chunk_id, document_id, chunk_index, text,
+                            metadata, collection
+                        )
                         VALUES (%s, %s, %s, %s, %s, %s)
                         ON CONFLICT (chunk_id) DO UPDATE
                             SET text = EXCLUDED.text,
@@ -67,12 +72,19 @@ class PgVectorStore:
                         returning=False,
                     )
                     embedding_rows = [
-                        (chunk.chunk_id, embedder.model_name, embedder.dimensions, vector)
+                        (
+                            chunk.chunk_id,
+                            embedder.model_name,
+                            embedder.dimensions,
+                            vector,
+                        )
                         for chunk, vector in zip(chunks, vectors)
                     ]
                     cur.executemany(
                         """
-                        INSERT INTO embeddings (chunk_id, model_name, dimensions, vector)
+                        INSERT INTO embeddings (
+                            chunk_id, model_name, dimensions, vector
+                        )
                         VALUES (%s, %s, %s, %s)
                         ON CONFLICT (chunk_id, model_name) DO UPDATE
                             SET vector = EXCLUDED.vector,
@@ -102,15 +114,21 @@ class PgVectorStore:
                 with conn.cursor() as cur:
                     cur.execute(
                         """
-                        SELECT c.chunk_id, c.document_id, c.chunk_index, c.text, c.metadata,
-                               1 - (e.vector <=> %s::vector) AS score
+                        SELECT c.chunk_id, c.document_id, c.chunk_index, c.text,
+                               c.metadata, 1 - (e.vector <=> %s::vector) AS score
                         FROM embeddings e
                         JOIN chunks c ON c.chunk_id = e.chunk_id
                         WHERE e.model_name = %s AND c.collection = %s
                         ORDER BY e.vector <=> %s::vector
                         LIMIT %s
                         """,
-                        (vector, embedder.model_name, self._collection_name, vector, top_k),
+                        (
+                            vector,
+                            embedder.model_name,
+                            self._collection_name,
+                            vector,
+                            top_k,
+                        ),
                     )
                     rows = cur.fetchall()
             return [
@@ -136,7 +154,8 @@ class PgVectorStore:
             with self._pool.connection() as conn:
                 with conn.cursor() as cur:
                     cur.execute(
-                        "DELETE FROM chunks WHERE chunk_id = ANY(%s) AND collection = %s",
+                        "DELETE FROM chunks WHERE chunk_id = ANY(%s) "
+                        "AND collection = %s",
                         (chunk_ids, self._collection_name),
                     )
                 conn.commit()
@@ -167,7 +186,10 @@ class PgVectorStore:
     async def search_async(
         self, query: str, embedder: EmbedderProtocol, top_k: int = 5
     ) -> list[DocumentChunk]:
-        return [chunk for chunk, _ in await self.search_with_scores_async(query, embedder, top_k)]
+        return [
+            chunk
+            for chunk, _ in await self.search_with_scores_async(query, embedder, top_k)
+        ]
 
     async def search_with_scores_async(
         self, query: str, embedder: EmbedderProtocol, top_k: int = 5

@@ -1,13 +1,13 @@
+from collections.abc import Iterator
+from pathlib import Path
+
 from ragstack_core.loaders.base_loader import BaseLoader
 from ragstack_core.models.document_block import DocumentBlock
 from ragstack_core.models.document_info import DocumentInfo
-from pathlib import Path
-from collections.abc import Iterator
 
 
 class TextLoader(BaseLoader):
-    
-    def __init__(self, lines_per_block:int = 50):
+    def __init__(self, lines_per_block: int = 50):
         if lines_per_block <= 0:
             raise ValueError("lines_per_block must be greater than 0")
         self._lines_per_block = lines_per_block
@@ -63,12 +63,12 @@ class TextLoader(BaseLoader):
             )
 
     def _create_block(
-            self,
-            document_info: DocumentInfo,
-            block_index: int,
-            block_lines: list[str],
-            start_line_number: int,
-            end_line_number: int,
+        self,
+        document_info: DocumentInfo,
+        block_index: int,
+        block_lines: list[str],
+        start_line_number: int,
+        end_line_number: int,
     ) -> DocumentBlock:
         return DocumentBlock(
             document_id=document_info.document_id,
@@ -82,5 +82,5 @@ class TextLoader(BaseLoader):
                 "lines_per_block": self._lines_per_block,
                 "start_line_number": start_line_number,
                 "end_line_number": end_line_number,
-        },
-    )
+            },
+        )

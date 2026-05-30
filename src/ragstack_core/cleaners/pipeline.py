@@ -1,21 +1,26 @@
-from ragstack_core.cleaners.base_cleaner import CleanContext, CleaningResult, CleanerStep
-from ragstack_core.models.document_block import DocumentBlock
+from ragstack_core.cleaners.base_cleaner import (
+    CleanContext,
+    CleanerStep,
+    CleaningResult,
+)
 from ragstack_core.cleaners.steps import (
-    EncodingFixer,
-    UnicodeNormalizer,
     ControlCharCleaner,
-    LigatureExpander,
-    TypographyCleaner,
+    EncodingFixer,
     HtmlTagStripper,
+    LigatureExpander,
     MarkdownCleaner,
     PdfArtifactCleaner,
-    WhitespaceNormalizer,
     PiiRedactor,
+    TypographyCleaner,
+    UnicodeNormalizer,
+    WhitespaceNormalizer,
 )
+from ragstack_core.models.document_block import DocumentBlock
 
 
 class TextCleaningPipeline:
-    """Composable pipeline that runs text through an ordered list of CleanerStep instances.
+    """Composable pipeline that runs text through an ordered list of CleanerStep
+    instances.
 
     Usage — preset factories:
         pipeline = TextCleaningPipeline.for_pdf()
@@ -136,14 +141,16 @@ class TextCleaningPipeline:
           5. Normalize typography — must be after ligature expansion.
           6. Normalize whitespace last — consolidates any spaces left by prior steps.
         """
-        return cls([
-            EncodingFixer(),
-            UnicodeNormalizer(),
-            ControlCharCleaner(),
-            LigatureExpander(),
-            TypographyCleaner(),
-            WhitespaceNormalizer(),
-        ])
+        return cls(
+            [
+                EncodingFixer(),
+                UnicodeNormalizer(),
+                ControlCharCleaner(),
+                LigatureExpander(),
+                TypographyCleaner(),
+                WhitespaceNormalizer(),
+            ]
+        )
 
     @classmethod
     def for_pdf(cls) -> "TextCleaningPipeline":
@@ -153,16 +160,18 @@ class TextCleaningPipeline:
         PdfArtifactCleaner (page numbers, running headers/footers) on top of
         the default steps.
         """
-        return cls([
-            EncodingFixer(),
-            UnicodeNormalizer(),
-            ControlCharCleaner(),
-            LigatureExpander(),
-            TypographyCleaner(),
-            HtmlTagStripper(),
-            PdfArtifactCleaner(),
-            WhitespaceNormalizer(),
-        ])
+        return cls(
+            [
+                EncodingFixer(),
+                UnicodeNormalizer(),
+                ControlCharCleaner(),
+                LigatureExpander(),
+                TypographyCleaner(),
+                HtmlTagStripper(),
+                PdfArtifactCleaner(),
+                WhitespaceNormalizer(),
+            ]
+        )
 
     @classmethod
     def for_markdown(cls) -> "TextCleaningPipeline":
@@ -172,16 +181,18 @@ class TextCleaningPipeline:
         MarkdownCleaner. MarkdownCleaner's file_type guard ensures it only
         activates when context.file_type is 'md' or 'markdown'.
         """
-        return cls([
-            EncodingFixer(),
-            UnicodeNormalizer(),
-            ControlCharCleaner(),
-            LigatureExpander(),
-            TypographyCleaner(),
-            HtmlTagStripper(),
-            MarkdownCleaner(),
-            WhitespaceNormalizer(),
-        ])
+        return cls(
+            [
+                EncodingFixer(),
+                UnicodeNormalizer(),
+                ControlCharCleaner(),
+                LigatureExpander(),
+                TypographyCleaner(),
+                HtmlTagStripper(),
+                MarkdownCleaner(),
+                WhitespaceNormalizer(),
+            ]
+        )
 
     @classmethod
     def for_tabular(cls) -> "TextCleaningPipeline":
@@ -190,14 +201,16 @@ class TextCleaningPipeline:
         Tabular data rarely contains markup; the focus is on encoding repair,
         typography normalisation, and whitespace cleanup.
         """
-        return cls([
-            EncodingFixer(),
-            UnicodeNormalizer(),
-            ControlCharCleaner(),
-            LigatureExpander(),
-            TypographyCleaner(),
-            WhitespaceNormalizer(),
-        ])
+        return cls(
+            [
+                EncodingFixer(),
+                UnicodeNormalizer(),
+                ControlCharCleaner(),
+                LigatureExpander(),
+                TypographyCleaner(),
+                WhitespaceNormalizer(),
+            ]
+        )
 
     @classmethod
     def for_docx(cls) -> "TextCleaningPipeline":
@@ -206,15 +219,17 @@ class TextCleaningPipeline:
         DOCX extractors sometimes emit residual HTML/XML fragments and smart
         punctuation from the Office XML schema.
         """
-        return cls([
-            EncodingFixer(),
-            UnicodeNormalizer(),
-            ControlCharCleaner(),
-            LigatureExpander(),
-            TypographyCleaner(),
-            HtmlTagStripper(),
-            WhitespaceNormalizer(),
-        ])
+        return cls(
+            [
+                EncodingFixer(),
+                UnicodeNormalizer(),
+                ControlCharCleaner(),
+                LigatureExpander(),
+                TypographyCleaner(),
+                HtmlTagStripper(),
+                WhitespaceNormalizer(),
+            ]
+        )
 
     @classmethod
     def with_pii_redaction(

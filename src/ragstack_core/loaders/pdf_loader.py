@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 
 
 class PdfLoader(BaseLoader):
-
     def __init__(self, pages_per_block: int = 1) -> None:
         if pages_per_block <= 0:
             raise ValueError("pages_per_block must be greater than 0")

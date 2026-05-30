@@ -1,4 +1,8 @@
-from ragstack_core.cleaners.base_cleaner import CleanContext, CleaningResult, CleanerStep
+from ragstack_core.cleaners.base_cleaner import (
+    CleanContext,
+    CleanerStep,
+    CleaningResult,
+)
 from ragstack_core.cleaners.pipeline import TextCleaningPipeline
 from ragstack_core.cleaners.text_cleaner import TextCleaner
 

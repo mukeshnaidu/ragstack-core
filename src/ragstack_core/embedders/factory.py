@@ -10,13 +10,13 @@ def create_embedder(
     match provider:
         case EmbeddingProvider.OPENAI:
             from ragstack_core.embedders.openai_embedder import OpenAIEmbedder
+
             return OpenAIEmbedder(
                 model_name=model_name, batch_size=batch_size, **kwargs
             )
         case EmbeddingProvider.LOCAL:
             from ragstack_core.embedders.local_embedder import LocalEmbedder
-            return LocalEmbedder(
-                model_name=model_name, batch_size=batch_size, **kwargs
-            )
+
+            return LocalEmbedder(model_name=model_name, batch_size=batch_size, **kwargs)
         case _:
             raise ValueError(f"Unknown provider: {provider!r}")

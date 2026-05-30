@@ -13,7 +13,6 @@ _DEFAULT_BATCH_SIZE = 512
 
 
 class OpenAIEmbedder:
-
     def __init__(
         self,
         api_key: str | None = None,
