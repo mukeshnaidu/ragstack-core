@@ -6,9 +6,9 @@ No API keys needed.
 """
 from pathlib import Path
 
-from ragstack_core.loaders import TextLoader
-from ragstack_core.cleaners.pipeline import TextCleaningPipeline
 from ragstack_core.chunkers.fixed_size_chunker import FixedSizeChunker, ModelType
+from ragstack_core.cleaners.pipeline import TextCleaningPipeline
+from ragstack_core.loaders import TextLoader
 from ragstack_core.models.document_block import DocumentBlock
 
 SAMPLE_TXT = Path(__file__).parent / "sample_data" / "sample.txt"
@@ -27,7 +27,9 @@ def load_sample_blocks() -> list[DocumentBlock]:
     return blocks
 
 
-def demo_chunker(label: str, chunker: FixedSizeChunker, blocks: list[DocumentBlock]) -> None:
+def demo_chunker(
+    label: str, chunker: FixedSizeChunker, blocks: list[DocumentBlock]
+) -> None:
     print(f"\n{'─' * 60}")
     print(f"  {label}")
     print(f"  chunk_size={chunker.chunk_size}, overlap={chunker.overlap}")
@@ -52,7 +54,8 @@ def demo_chunker(label: str, chunker: FixedSizeChunker, blocks: list[DocumentBlo
 if __name__ == "__main__":
     print("Loading and cleaning blocks from sample.txt...")
     blocks = load_sample_blocks()
-    print(f"Loaded {len(blocks)} block(s) (~{sum(len(b.text) for b in blocks)} chars).\n")
+    total_chars = sum(len(b.text) for b in blocks)
+    print(f"Loaded {len(blocks)} block(s) (~{total_chars} chars).\n")
 
     demo_chunker(
         "ModelType.CLAUDE — 1024 tokens, 100 overlap",

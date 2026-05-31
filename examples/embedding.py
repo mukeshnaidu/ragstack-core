@@ -4,7 +4,7 @@ embedding.py — Demonstrates the OpenAI embedder with text-embedding-3-large.
 Requires: OPENAI_API_KEY environment variable
 Install : uv add 'ragstack[openai]'
 """
-from ragstack_core.embedders import create_embedder, EmbeddingProvider
+from ragstack_core.embedders import EmbeddingProvider, create_embedder
 
 SAMPLE_TEXTS = [
     "The Battle of Borodino was one of the deadliest battles of the Napoleonic Wars.",

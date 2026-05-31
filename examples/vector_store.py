@@ -9,20 +9,26 @@ Run the schema first if you haven't already:
 """
 import os
 
-from ragstack_core.embedders import create_embedder, EmbeddingProvider
-from ragstack_core.stores import create_store, VectorStoreProvider
+from ragstack_core.embedders import EmbeddingProvider, create_embedder
 from ragstack_core.models.document_chunk import DocumentChunk
+from ragstack_core.stores import VectorStoreProvider, create_store
 
 CHUNKS = [
     DocumentChunk(
         document_id="demo-doc",
         chunk_index=0,
-        text="The James Webb Space Telescope captures infrared images of distant galaxies.",
+        text=(
+            "The James Webb Space Telescope captures infrared images "
+            "of distant galaxies."
+        ),
     ),
     DocumentChunk(
         document_id="demo-doc",
         chunk_index=1,
-        text="Sourdough bread requires a live starter culture of wild yeast and bacteria.",
+        text=(
+            "Sourdough bread requires a live starter culture of wild "
+            "yeast and bacteria."
+        ),
     ),
     DocumentChunk(
         document_id="demo-doc",
@@ -32,12 +38,18 @@ CHUNKS = [
     DocumentChunk(
         document_id="demo-doc",
         chunk_index=3,
-        text="Statins are commonly prescribed to lower LDL cholesterol in patients at cardiac risk.",
+        text=(
+            "Statins are commonly prescribed to lower LDL cholesterol "
+            "in patients at cardiac risk."
+        ),
     ),
     DocumentChunk(
         document_id="demo-doc",
         chunk_index=4,
-        text="The offside rule in football prevents attackers from gaining an unfair positional advantage.",
+        text=(
+            "The offside rule in football prevents attackers from "
+            "gaining an unfair positional advantage."
+        ),
     ),
 ]
 
@@ -52,7 +64,9 @@ if __name__ == "__main__":
     postgres_url = os.environ["POSTGRES_URL"]
 
     print("Creating embedder and store...")
-    embedder = create_embedder(EmbeddingProvider.OPENAI, model_name="text-embedding-3-large")
+    embedder = create_embedder(
+        EmbeddingProvider.OPENAI, model_name="text-embedding-3-large"
+    )
     store = create_store(VectorStoreProvider.PGVECTOR, connection_string=postgres_url)
 
     _separator("Upserting 5 chunks")
