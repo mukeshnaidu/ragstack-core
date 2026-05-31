@@ -17,11 +17,11 @@ Run the schema first if you haven't already:
 import os
 from pathlib import Path
 
-from ragstack_core.loaders import TextLoader
-from ragstack_core.cleaners.pipeline import TextCleaningPipeline
 from ragstack_core.chunkers.fixed_size_chunker import FixedSizeChunker, ModelType
-from ragstack_core.embedders import create_embedder, EmbeddingProvider
-from ragstack_core.stores import create_store, VectorStoreProvider
+from ragstack_core.cleaners.pipeline import TextCleaningPipeline
+from ragstack_core.embedders import EmbeddingProvider, create_embedder
+from ragstack_core.loaders import TextLoader
+from ragstack_core.stores import VectorStoreProvider, create_store
 
 SAMPLE_TXT = Path(__file__).parent / "sample_data" / "sample.txt"
 MAX_BLOCKS = 10  # limit blocks to keep API cost low during development
@@ -63,7 +63,9 @@ def main() -> None:
 
     # ── [4/5] Embed & Store ───────────────────────────────────────────
     print("[4/5] Embedding and storing...")
-    embedder = create_embedder(EmbeddingProvider.OPENAI, model_name="text-embedding-3-large")
+    embedder = create_embedder(
+        EmbeddingProvider.OPENAI, model_name="text-embedding-3-large"
+    )
     store = create_store(VectorStoreProvider.PGVECTOR, connection_string=postgres_url)
     store.upsert(chunks, embedder)
     print(f"      Stored {len(chunks)} chunks (model: {embedder.model_name})")

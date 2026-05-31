@@ -9,7 +9,13 @@ Set PDF_FILE and EXCEL_FILE to your own files, or leave them as None to skip.
 """
 from pathlib import Path
 
-from ragstack_core.loaders import TextLoader, MarkdownLoader, CsvLoader, PdfLoader, ExcelLoader
+from ragstack_core.loaders import (
+    CsvLoader,
+    ExcelLoader,
+    MarkdownLoader,
+    PdfLoader,
+    TextLoader,
+)
 
 SAMPLE_TXT = Path(__file__).parent / "sample_data" / "sample.txt"
 SAMPLE_MD = Path(__file__).parent / "sample_data" / "sample.md"
@@ -52,7 +58,10 @@ def demo_markdown_loader() -> None:
     _separator("MarkdownLoader — sample.md")
     loader = MarkdownLoader()
     info = loader.load_info(SAMPLE_MD)
-    print(f"DocumentInfo: name={info.file_name}, type={info.file_type}, size={info.file_size_bytes}B")
+    print(
+        f"DocumentInfo: name={info.file_name}, "
+        f"type={info.file_type}, size={info.file_size_bytes}B"
+    )
 
     blocks = list(loader.load_blocks(SAMPLE_MD, info))
     print(f"\nTotal blocks (one per heading): {len(blocks)}")
