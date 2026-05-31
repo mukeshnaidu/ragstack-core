@@ -4,6 +4,7 @@ chunking.py — Demonstrates FixedSizeChunker with three configurations.
 Uses sample.txt as input corpus — one large block to show how chunk_size affects output.
 No API keys needed.
 """
+
 from pathlib import Path
 
 from ragstack_core.chunkers.fixed_size_chunker import FixedSizeChunker, ModelType
