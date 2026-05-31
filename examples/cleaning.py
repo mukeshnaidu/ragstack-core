@@ -4,6 +4,7 @@ cleaning.py — Demonstrates TextCleaningPipeline presets.
 No file I/O needed. A DocumentBlock is constructed manually with intentionally
 dirty text and run through three pipeline presets.
 """
+
 from ragstack_core.cleaners.base_cleaner import CleanContext
 from ragstack_core.cleaners.pipeline import TextCleaningPipeline
 from ragstack_core.models.document_block import DocumentBlock

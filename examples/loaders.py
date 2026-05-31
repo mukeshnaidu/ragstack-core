@@ -7,6 +7,7 @@ Each loader shows:
 
 Set PDF_FILE and EXCEL_FILE to your own files, or leave them as None to skip.
 """
+
 from pathlib import Path
 
 from ragstack_core.loaders import (
@@ -23,8 +24,8 @@ SAMPLE_CSV = Path(__file__).parent / "sample_data" / "sample.csv"
 
 # Set these to your own files, or leave as None to skip
 TEXT_FILE = SAMPLE_TXT  # e.g. Path("/path/to/your.txt")
-PDF_FILE = None          # e.g. Path("/path/to/your.pdf")
-EXCEL_FILE = None        # e.g. Path("/path/to/your.xlsx")
+PDF_FILE = None  # e.g. Path("/path/to/your.pdf")
+EXCEL_FILE = None  # e.g. Path("/path/to/your.xlsx")
 
 
 def _separator(title: str) -> None:

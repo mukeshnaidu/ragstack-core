@@ -7,6 +7,7 @@ Install : uv add 'ragstack[openai]' 'ragstack[pgvector]'
 Run the schema first if you haven't already:
   psql $POSTGRES_URL -f src/ragstack_core/stores/schema.sql
 """
+
 import os
 
 from ragstack_core.embedders import EmbeddingProvider, create_embedder
